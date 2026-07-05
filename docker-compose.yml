@@ -1,0 +1,26 @@
+services:
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - /root/task/data/redis:/data
+    networks:
+      - tasknet
+
+  web:
+    build: /root/task
+    container_name: task_fastapi_app
+    depends_on:
+      - redis
+    ports:
+      - "8000:8000"
+    working_dir: /root/task
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    networks:
+      - tasknet
+
+networks:
+  tasknet:
+    driver: bridge
