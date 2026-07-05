@@ -5,8 +5,10 @@ _pool = ConnectionPool(
     host="redis",
     port=6379,
     db=0,
-    max_connections=2,
-    decode_responses=False,
+    max_connections=50,
+    decode_responses=True,
+    socket_timeout=5,
+    socket_connect_timeout=5,
 )
 
 
